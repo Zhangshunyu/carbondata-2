@@ -20,8 +20,6 @@
 package org.carbondata.processing.merger.step;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.Arrays;
 
 import org.carbondata.common.logging.LogService;
 import org.carbondata.common.logging.LogServiceFactory;
@@ -31,8 +29,6 @@ import org.carbondata.core.carbon.path.CarbonStorePath;
 import org.carbondata.core.carbon.path.CarbonTablePath;
 import org.carbondata.core.constants.CarbonCommonConstants;
 import org.carbondata.core.util.CarbonProperties;
-import org.carbondata.core.util.CarbonUtil;
-import org.carbondata.core.util.CarbonUtilException;
 import org.carbondata.processing.merger.exeception.SliceMergerException;
 import org.carbondata.processing.util.CarbonDataProcessorUtil;
 
