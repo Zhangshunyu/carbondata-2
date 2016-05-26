@@ -155,42 +155,6 @@ public class CarbonSliceMergerStep extends BaseStep {
     }
   }
 
-  private void deleteCheckPointFiles() {
-    String tempLocationKey = meta.getSchemaName() + '_' + meta.getCubeName();
-    String sortTmpFolderLoc = CarbonProperties.getInstance()
-        .getProperty(tempLocationKey, CarbonCommonConstants.STORE_LOCATION_DEFAULT_VAL)
-        + File.separator + meta.getSchemaName() + File.separator + meta.getCubeName();
-
-    sortTmpFolderLoc =
-        sortTmpFolderLoc + File.separator + CarbonCommonConstants.SORT_TEMP_FILE_LOCATION
-            + File.separator + meta.getTabelName();
-
-    File sortTmpLocation = new File(sortTmpFolderLoc);
-    File[] filesToDelete = sortTmpLocation.listFiles(new FileFilter() {
-
-      @Override public boolean accept(File pathname) {
-        if (pathname.getName().indexOf(meta.getTabelName() + CarbonCommonConstants.CHECKPOINT_EXT)
-            > -1 ||
-            pathname.getName()
-                .indexOf(meta.getTabelName() + CarbonCommonConstants.MEASUREMETADATA_FILE_EXT) > -1
-            || pathname.getName().startsWith(meta.getTabelName())) {
-          return true;
-        }
-
-        return false;
-
-      }
-    });
-
-    try {
-      CarbonUtil.deleteFiles(filesToDelete);
-    } catch (CarbonUtilException e) {
-      LOGGER.error("Unable to delete the checkpoints related files: "
-          + Arrays.toString(filesToDelete));
-    }
-
-  }
-
   /**
    * @param storeLocation
    * @throws SliceMergerException
@@ -232,24 +196,6 @@ public class CarbonSliceMergerStep extends BaseStep {
     meta = (CarbonSliceMergerStepMeta) smi;
     data = (CarbonSliceMergerStepData) sdi;
     return super.init(smi, sdi);
-  }
-
-  private boolean containsInProgressFiles(File file) {
-    File[] inProgressNewFiles = null;
-    inProgressNewFiles = file.listFiles(new FileFilter() {
-
-      @Override public boolean accept(File file1) {
-        if (file1.getName().endsWith(CarbonCommonConstants.FILE_INPROGRESS_STATUS)) {
-          return true;
-        }
-        return false;
-      }
-    });
-
-    if (inProgressNewFiles.length > 0) {
-      return true;
-    }
-    return false;
   }
 
   /**
