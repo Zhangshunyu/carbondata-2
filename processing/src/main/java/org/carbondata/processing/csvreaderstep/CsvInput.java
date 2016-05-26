@@ -19,7 +19,6 @@
 
 package org.carbondata.processing.csvreaderstep;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
