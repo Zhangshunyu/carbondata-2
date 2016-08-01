@@ -28,7 +28,7 @@ import scala.util.Random
 import org.apache.hadoop.conf.{Configurable, Configuration}
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.mapreduce.lib.input.FileSplit
-import org.apache.spark.{Logging, Partition, SparkContext, SparkEnv}
+import org.apache.spark.{util => _, _}
 import org.apache.spark.sql.{CarbonEnv, CarbonRelation, SQLContext}
 import org.apache.spark.sql.execution.command.{AlterTableModel, CompactionCallableModel, CompactionModel, Partitioner}
 import org.apache.spark.sql.hive.DistributionUtil
@@ -830,10 +830,8 @@ object CarbonDataRDDFactory extends Logging {
           logInfo("DataLoad failure")
           logger.error(ex)
           ex match {
-            case loadException: DataLoadingException =>
-              if (loadException.getErrorCode == DataProcessorConstants.CSV_VALIDATION_ERRROR_CODE) {
-                executorMessage = loadException.getMessage
-              }
+            case sparkException: SparkException =>
+              executorMessage = sparkException.getCause.getMessage
             case _ =>
           }
       }
