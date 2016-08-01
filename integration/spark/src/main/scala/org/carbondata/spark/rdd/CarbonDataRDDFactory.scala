@@ -29,7 +29,7 @@ import scala.util.Random
 import org.apache.hadoop.conf.{Configurable, Configuration}
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.mapreduce.lib.input.FileSplit
-import org.apache.spark.{Logging, Partition, SparkContext, SparkEnv}
+import org.apache.spark.{Logging, Partition, SparkContext, SparkEnv, SparkException}
 import org.apache.spark.sql.{CarbonEnv, CarbonRelation, SQLContext}
 import org.apache.spark.sql.execution.command.{AlterTableModel, CompactionCallableModel,
 CompactionModel, Partitioner}
