@@ -831,7 +831,9 @@ object CarbonDataRDDFactory extends Logging {
           logger.error(ex)
           ex match {
             case sparkException: SparkException =>
-              executorMessage = sparkException.getCause.getMessage
+              if (sparkException.getCause.isInstanceOf[DataLoadingException]) {
+                executorMessage = sparkException.getCause.getMessage
+              }
             case _ =>
           }
       }
