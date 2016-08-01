@@ -19,23 +19,20 @@
 package org.carbondata.spark.rdd
 
 import java.util
-import java.util.concurrent.{Executors, ExecutorService, Future}
+import java.util.concurrent.{ExecutorService, Executors, Future}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks._
 import scala.util.Random
-
 import org.apache.hadoop.conf.{Configurable, Configuration}
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.mapreduce.lib.input.FileSplit
 import org.apache.spark.{Logging, Partition, SparkContext, SparkEnv}
 import org.apache.spark.sql.{CarbonEnv, CarbonRelation, SQLContext}
-import org.apache.spark.sql.execution.command.{AlterTableModel, CompactionCallableModel,
-CompactionModel, Partitioner}
+import org.apache.spark.sql.execution.command.{AlterTableModel, CompactionCallableModel, CompactionModel, Partitioner}
 import org.apache.spark.sql.hive.DistributionUtil
 import org.apache.spark.util.{FileUtils, SplitUtils}
-
 import org.carbondata.common.logging.LogServiceFactory
 import org.carbondata.core.carbon.CarbonDataLoadSchema
 import org.carbondata.core.carbon.datastore.block.{Distributable, TableBlockInfo}
@@ -47,6 +44,8 @@ import org.carbondata.core.locks.{CarbonLockFactory, ICarbonLock, LockUsage}
 import org.carbondata.core.util.{CarbonProperties, CarbonUtil}
 import org.carbondata.integration.spark.merger.{CompactionCallable, CompactionType}
 import org.carbondata.lcm.status.SegmentStatusManager
+import org.carbondata.processing.constants.DataProcessorConstants
+import org.carbondata.processing.etl.DataLoadingException
 import org.carbondata.processing.util.CarbonDataProcessorUtil
 import org.carbondata.spark._
 import org.carbondata.spark.load._
@@ -778,6 +777,7 @@ object CarbonDataRDDFactory extends Logging {
         partitioner.partitionCount, currentLoadCount.toString)
       var loadStatus = CarbonCommonConstants.STORE_LOADSTATUS_SUCCESS
       var status: Array[(String, LoadMetadataDetails)] = null
+      var executorMessage: String = ""
       try {
         status = new
             CarbonDataLoadRDD(sc.sparkContext,
@@ -829,6 +829,13 @@ object CarbonDataRDDFactory extends Logging {
           loadStatus = CarbonCommonConstants.STORE_LOADSTATUS_FAILURE
           logInfo("DataLoad failure")
           logger.error(ex)
+          ex match {
+            case loadException: DataLoadingException =>
+              if (loadException.getErrorCode == DataProcessorConstants.CSV_VALIDATION_ERRROR_CODE) {
+                executorMessage = loadException.getMessage
+              }
+            case _ =>
+          }
       }
 
       if (loadStatus == CarbonCommonConstants.STORE_LOADSTATUS_FAILURE) {
@@ -856,7 +863,7 @@ object CarbonDataRDDFactory extends Logging {
                 )
             }
           }
-          message = "DataLoad failure"
+          message = "DataLoad failure: " + executorMessage
         }
         logInfo("********clean up done**********")
         logger.audit(s"Data load is failed for " +
