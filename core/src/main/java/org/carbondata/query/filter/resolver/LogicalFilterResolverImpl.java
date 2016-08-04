@@ -86,7 +86,8 @@ public class LogicalFilterResolverImpl implements FilterResolverIntf {
     return null;
   }
 
-  @Override public void getStartKey(SegmentProperties segmentProperties, long[] startKey,
+  @Override public void getStartKey(SegmentProperties segmentProperties,
+      AbsoluteTableIdentifier tableIdentifier, long[] startKey,
       SortedMap<Integer, byte[]> setOfStartKeyByteArray, List<long[]> startKeyList)
       throws QueryExecutionException {
 
