@@ -848,7 +848,7 @@ public final class FilterUtil {
       List<long[]> startKeyList) {
     for (Entry<CarbonDimension, List<DimColumnFilterInfo>> entry : dimensionFilter.entrySet()) {
       List<DimColumnFilterInfo> values = entry.getValue();
-      if (null == values) {
+	  if (null == values || !entry.getKey().hasEncoding(Encoding.DICTIONARY)) {
         continue;
       }
       boolean isExcludePresent = false;
