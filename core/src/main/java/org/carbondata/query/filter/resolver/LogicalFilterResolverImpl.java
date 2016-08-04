@@ -18,6 +18,7 @@
  */
 package org.carbondata.query.filter.resolver;
 
+import java.util.List;
 import java.util.SortedMap;
 
 import org.carbondata.core.carbon.AbsoluteTableIdentifier;
@@ -86,13 +87,16 @@ public class LogicalFilterResolverImpl implements FilterResolverIntf {
   }
 
   @Override public void getStartKey(SegmentProperties segmentProperties, long[] startKey,
-      SortedMap<Integer, byte[]> setOfStartKeyByteArray) {
+      SortedMap<Integer, byte[]> setOfStartKeyByteArray, List<long[]> startKeyList)
+      throws QueryExecutionException {
 
   }
 
   @Override public void getEndKey(SegmentProperties segmentProperties,
       AbsoluteTableIdentifier tableIdentifier, long[] endKeys,
-      SortedMap<Integer, byte[]> setOfEndKeyByteArray) throws QueryExecutionException {
+      SortedMap<Integer, byte[]> setOfEndKeyByteArray, List<long[]> endKeyList)
+      throws QueryExecutionException {
+
   }
 
   @Override public FilterExecuterType getFilterExecuterType() {
