@@ -90,7 +90,7 @@ import org.carbondata.query.filter.resolver.RowLevelFilterResolverImpl;
 import org.carbondata.query.filter.resolver.resolverinfo.DimColumnResolvedFilterInfo;
 import org.carbondata.query.schema.metadata.DimColumnFilterInfo;
 
-public final class FilterUtil {
+public final class  FilterUtil {
   private static final LogService LOGGER =
       LogServiceFactory.getLogService(FilterUtil.class.getName());
 
@@ -1206,8 +1206,9 @@ public final class FilterUtil {
           startkeyColumnLevel[j++] = oneStartKey[i];
         }
         Arrays.sort(startkeyColumnLevel);
-        // get the min one as start of this column level
-        startKey[i] = startkeyColumnLevel[0];
+        // get the min - 1 as start of this column level, for example if a block contains 5,6
+        // the filter is 6, but that block's start key is 5, if not -1, this block will missing.
+        startKey[i] = startkeyColumnLevel[0] - 1;
       }
     }
 
