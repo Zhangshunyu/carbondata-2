@@ -85,7 +85,7 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
           select name,count(name) as amount from blockprune
           where name='c' or name='b' or name='a' group by name
         """),
-      Seq(Row("a", 240000), Row("b", 240000), Row("c", 240000)))
+      Seq(Row("a", 240001), Row("b", 240001), Row("c", 240001)))
 
     // data only in middle 2 blocks
     checkAnswer(
@@ -94,7 +94,7 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
           select name,count(name) as amount from blockprune
           where name='b' group by name
         """),
-      Seq(Row("b", 240000)))
+      Seq(Row("b", 240001)))
   }
 
   override def afterAll {
