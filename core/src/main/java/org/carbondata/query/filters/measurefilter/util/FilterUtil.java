@@ -697,8 +697,8 @@ public final class FilterUtil {
       AbsoluteTableIdentifier tableIdentifier, long[] startKey, SegmentProperties segmentProperties,
       List<long[]> startKeyList) throws QueryExecutionException {
     for(int i = 0; i < startKey.length; i++) {
-      // The min surrogate key is 2, set it as the init value for starkey of each column level
-      startKey[i] = 2;
+      // The min surrogate key is 1, set it as the init value for starkey of each column level
+      startKey[i] = 1;
     }
     getStartKeyWithFilter(dimensionFilter, startKey, startKeyList);
   }
