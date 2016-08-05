@@ -47,7 +47,7 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
         file.createNewFile()
       }
       writer = FileFactory.getDataOutputStream(outputPath, fileType)
-      for (i <- 0 to 2;) {
+      for (i <- 0 to 2) {
         for (j <- 0 to 240000) {
           writer.writeBytes(testData(i) + "," + j + "\n")
         }
@@ -76,10 +76,8 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
         STORED BY 'org.apache.carbondata.format'
       """)
     sql(
-      """
-        LOAD DATA LOCAL INPATH './src/test/resources/block_prune_test.csv'
-        INTO table blockprune options('FILEHEADER'='name,id'))
-      """)
+        s"LOAD DATA LOCAL INPATH '$outputPath' INTO table blockprune options('FILEHEADER'='name,id')"
+      )
     // data is in all 6 blocks
     checkAnswer(
       sql(
