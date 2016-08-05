@@ -78,7 +78,7 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
     sql(
         s"LOAD DATA LOCAL INPATH '$outputPath' INTO table blockprune options('FILEHEADER'='name,id')"
       )
-    // data is in all 6 blocks
+    // data is in all 7 blocks
     checkAnswer(
       sql(
         """
@@ -87,7 +87,7 @@ class BlockPruneQueryTestCase extends QueryTest with BeforeAndAfterAll {
         """),
       Seq(Row("a", 240001), Row("b", 240001), Row("c", 240001)))
 
-    // data only in middle 2 blocks
+    // data only in middle 3/4/5 blocks
     checkAnswer(
       sql(
         """
